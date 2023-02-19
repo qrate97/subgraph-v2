@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Qrate
+    network: mumbai
+    source:
+      address: "0x42841ee00b21bcf92afb4280e47a60e15aa42fc2"
+      abi: Qrate
+      startBlock: 32199743
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Moderator
+        - Question
+      abis:
+        - name: Qrate
+          file: Qrate\abis\Qrate.json
+      eventHandlers:
+        - event: Moderator(address,string,bool)
+          handler: handleModerator
+        - event: Question((uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256))
+          handler: handleQuestion
+      file: Qrate\Qrate.wasm

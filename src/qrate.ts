@@ -5,10 +5,11 @@ import {
 import { Moderator, Question } from "../generated/schema"
 
 export function handleModerator(event: ModeratorEvent): void {
-  let entity = new Moderator(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.moderatorAddress = event.params.moderatorAddress
+  const id = event.params.moderatorAddress.toHex();
+  let entity = Moderator.load(id)
+  if(!entity)
+    entity = new Moderator(id)
+  entity.moderatorAddress = event.params.moderatorAddress.toString()
   entity.subject = event.params.subject
   entity.approved = event.params.approved
 
@@ -20,9 +21,10 @@ export function handleModerator(event: ModeratorEvent): void {
 }
 
 export function handleQuestion(event: QuestionEvent): void {
-  let entity = new Question(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
+  const id = event.params.question.mainId.toHex();
+  let entity = Question.load(id);
+  if(!entity)
+    entity = new Question(id)
   entity.question_mainId = event.params.question.mainId
   entity.question_id = event.params.question.id
   entity.question_question_string = event.params.question.question_string

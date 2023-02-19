@@ -1,0 +1,27 @@
+type Moderator @entity(immutable: true) {
+  id: Bytes!
+  moderatorAddress: Bytes! # address
+  subject: String! # string
+  approved: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Question @entity(immutable: true) {
+  id: Bytes!
+  question_mainId: BigInt! # uint256
+  question_id: BigInt! # uint256
+  question_question_string: String! # string
+  question_subject: String! # string
+  question_topic: String! # string
+  question_subTopic: String! # string
+  question_upvotes: BigInt! # uint256
+  question_downvotes: BigInt! # uint256
+  question_applicant: Bytes! # address
+  question_status: Int! # uint8
+  question_incentives: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

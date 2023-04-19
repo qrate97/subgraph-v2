@@ -27,12 +27,28 @@ export class Moderator__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
+  get moderator(): ModeratorModeratorStruct {
+    return changetype<ModeratorModeratorStruct>(
+      this._event.parameters[1].value.toTuple()
+    );
+  }
+}
+
+export class ModeratorModeratorStruct extends ethereum.Tuple {
+  get name(): string {
+    return this[0].toString();
+  }
+
   get subject(): string {
-    return this._event.parameters[1].value.toString();
+    return this[1].toString();
+  }
+
+  get proof(): string {
+    return this[2].toString();
   }
 
   get approved(): boolean {
-    return this._event.parameters[2].value.toBoolean();
+    return this[3].toBoolean();
   }
 }
 
@@ -49,130 +65,131 @@ export class Question__Params {
     this._event = event;
   }
 
+  get quesId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get sender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get question(): QuestionQuestionStruct {
     return changetype<QuestionQuestionStruct>(
-      this._event.parameters[0].value.toTuple()
+      this._event.parameters[2].value.toTuple()
     );
   }
 }
 
 export class QuestionQuestionStruct extends ethereum.Tuple {
-  get mainId(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get id(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get question_string(): string {
-    return this[2].toString();
+  get questionString(): string {
+    return this[0].toString();
   }
 
   get subject(): string {
-    return this[3].toString();
+    return this[1].toString();
   }
 
   get topic(): string {
-    return this[4].toString();
+    return this[2].toString();
   }
 
   get subTopic(): string {
-    return this[5].toString();
+    return this[3].toString();
   }
 
   get upvotes(): BigInt {
-    return this[6].toBigInt();
+    return this[4].toBigInt();
   }
 
   get downvotes(): BigInt {
-    return this[7].toBigInt();
+    return this[5].toBigInt();
   }
 
   get applicant(): Address {
-    return this[8].toAddress();
+    return this[6].toAddress();
   }
 
   get status(): i32 {
-    return this[9].toI32();
-  }
-
-  get incentives(): BigInt {
-    return this[10].toBigInt();
+    return this[7].toI32();
   }
 }
 
-export class Qrate__getQuestionsResultValue0Struct extends ethereum.Tuple {
-  get mainId(): BigInt {
-    return this[0].toBigInt();
+export class Subject extends ethereum.Event {
+  get params(): Subject__Params {
+    return new Subject__Params(this);
   }
+}
 
-  get id(): BigInt {
-    return this[1].toBigInt();
-  }
+export class Subject__Params {
+  _event: Subject;
 
-  get question_string(): string {
-    return this[2].toString();
+  constructor(event: Subject) {
+    this._event = event;
   }
 
   get subject(): string {
-    return this[3].toString();
+    return this._event.parameters[0].value.toString();
+  }
+}
+
+export class Qrate__moderatorsResult {
+  value0: string;
+  value1: string;
+  value2: string;
+  value3: boolean;
+
+  constructor(value0: string, value1: string, value2: string, value3: boolean) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
   }
 
-  get topic(): string {
-    return this[4].toString();
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromString(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value2", ethereum.Value.fromString(this.value2));
+    map.set("value3", ethereum.Value.fromBoolean(this.value3));
+    return map;
   }
 
-  get subTopic(): string {
-    return this[5].toString();
+  getName(): string {
+    return this.value0;
   }
 
-  get upvotes(): BigInt {
-    return this[6].toBigInt();
+  getSubject(): string {
+    return this.value1;
   }
 
-  get downvotes(): BigInt {
-    return this[7].toBigInt();
+  getProof(): string {
+    return this.value2;
   }
 
-  get applicant(): Address {
-    return this[8].toAddress();
-  }
-
-  get status(): i32 {
-    return this[9].toI32();
-  }
-
-  get incentives(): BigInt {
-    return this[10].toBigInt();
+  getApproved(): boolean {
+    return this.value3;
   }
 }
 
 export class Qrate__questionsResult {
-  value0: BigInt;
-  value1: BigInt;
+  value0: string;
+  value1: string;
   value2: string;
   value3: string;
-  value4: string;
-  value5: string;
-  value6: BigInt;
-  value7: BigInt;
-  value8: Address;
-  value9: i32;
-  value10: BigInt;
+  value4: BigInt;
+  value5: BigInt;
+  value6: Address;
+  value7: i32;
 
   constructor(
-    value0: BigInt,
-    value1: BigInt,
+    value0: string,
+    value1: string,
     value2: string,
     value3: string,
-    value4: string,
-    value5: string,
-    value6: BigInt,
-    value7: BigInt,
-    value8: Address,
-    value9: i32,
-    value10: BigInt
+    value4: BigInt,
+    value5: BigInt,
+    value6: Address,
+    value7: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -182,72 +199,54 @@ export class Qrate__questionsResult {
     this.value5 = value5;
     this.value6 = value6;
     this.value7 = value7;
-    this.value8 = value8;
-    this.value9 = value9;
-    this.value10 = value10;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value0", ethereum.Value.fromString(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
     map.set("value2", ethereum.Value.fromString(this.value2));
     map.set("value3", ethereum.Value.fromString(this.value3));
-    map.set("value4", ethereum.Value.fromString(this.value4));
-    map.set("value5", ethereum.Value.fromString(this.value5));
-    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
-    map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
-    map.set("value8", ethereum.Value.fromAddress(this.value8));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromAddress(this.value6));
     map.set(
-      "value9",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value9))
+      "value7",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value7))
     );
-    map.set("value10", ethereum.Value.fromUnsignedBigInt(this.value10));
     return map;
   }
 
-  getMainId(): BigInt {
+  getQuestionString(): string {
     return this.value0;
   }
 
-  getId(): BigInt {
+  getSubject(): string {
     return this.value1;
   }
 
-  getQuestion_string(): string {
+  getTopic(): string {
     return this.value2;
   }
 
-  getSubject(): string {
+  getSubTopic(): string {
     return this.value3;
   }
 
-  getTopic(): string {
+  getUpvotes(): BigInt {
     return this.value4;
   }
 
-  getSubTopic(): string {
+  getDownvotes(): BigInt {
     return this.value5;
   }
 
-  getUpvotes(): BigInt {
+  getApplicant(): Address {
     return this.value6;
   }
 
-  getDownvotes(): BigInt {
-    return this.value7;
-  }
-
-  getApplicant(): Address {
-    return this.value8;
-  }
-
   getStatus(): i32 {
-    return this.value9;
-  }
-
-  getIncentives(): BigInt {
-    return this.value10;
+    return this.value7;
   }
 }
 
@@ -271,90 +270,6 @@ export class Qrate extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getQuestionIdsToCheck(_subject: string): Array<BigInt> {
-    let result = super.call(
-      "getQuestionIdsToCheck",
-      "getQuestionIdsToCheck(string):(uint256[])",
-      [ethereum.Value.fromString(_subject)]
-    );
-
-    return result[0].toBigIntArray();
-  }
-
-  try_getQuestionIdsToCheck(
-    _subject: string
-  ): ethereum.CallResult<Array<BigInt>> {
-    let result = super.tryCall(
-      "getQuestionIdsToCheck",
-      "getQuestionIdsToCheck(string):(uint256[])",
-      [ethereum.Value.fromString(_subject)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
-  }
-
-  getQuestions(_subject: string): Array<Qrate__getQuestionsResultValue0Struct> {
-    let result = super.call(
-      "getQuestions",
-      "getQuestions(string):((uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256)[])",
-      [ethereum.Value.fromString(_subject)]
-    );
-
-    return result[0].toTupleArray<Qrate__getQuestionsResultValue0Struct>();
-  }
-
-  try_getQuestions(
-    _subject: string
-  ): ethereum.CallResult<Array<Qrate__getQuestionsResultValue0Struct>> {
-    let result = super.tryCall(
-      "getQuestions",
-      "getQuestions(string):((uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256)[])",
-      [ethereum.Value.fromString(_subject)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<Qrate__getQuestionsResultValue0Struct>()
-    );
-  }
-
-  getQuestionVoters(_subject: string, _id: BigInt): Array<Address> {
-    let result = super.call(
-      "getQuestionVoters",
-      "getQuestionVoters(string,uint256):(address[])",
-      [
-        ethereum.Value.fromString(_subject),
-        ethereum.Value.fromUnsignedBigInt(_id)
-      ]
-    );
-
-    return result[0].toAddressArray();
-  }
-
-  try_getQuestionVoters(
-    _subject: string,
-    _id: BigInt
-  ): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall(
-      "getQuestionVoters",
-      "getQuestionVoters(string,uint256):(address[])",
-      [
-        ethereum.Value.fromString(_subject),
-        ethereum.Value.fromUnsignedBigInt(_id)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
-  }
-
   minVotes(param0: string): BigInt {
     let result = super.call("minVotes", "minVotes(string):(uint256)", [
       ethereum.Value.fromString(param0)
@@ -374,46 +289,67 @@ export class Qrate extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  moderatorCount(param0: string): BigInt {
+  moderators(param0: Address): Qrate__moderatorsResult {
     let result = super.call(
-      "moderatorCount",
-      "moderatorCount(string):(uint256)",
-      [ethereum.Value.fromString(param0)]
+      "moderators",
+      "moderators(address):(string,string,string,bool)",
+      [ethereum.Value.fromAddress(param0)]
     );
 
-    return result[0].toBigInt();
+    return new Qrate__moderatorsResult(
+      result[0].toString(),
+      result[1].toString(),
+      result[2].toString(),
+      result[3].toBoolean()
+    );
   }
 
-  try_moderatorCount(param0: string): ethereum.CallResult<BigInt> {
+  try_moderators(
+    param0: Address
+  ): ethereum.CallResult<Qrate__moderatorsResult> {
     let result = super.tryCall(
-      "moderatorCount",
-      "moderatorCount(string):(uint256)",
-      [ethereum.Value.fromString(param0)]
+      "moderators",
+      "moderators(address):(string,string,string,bool)",
+      [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(
+      new Qrate__moderatorsResult(
+        value[0].toString(),
+        value[1].toString(),
+        value[2].toString(),
+        value[3].toBoolean()
+      )
+    );
   }
 
-  moderators(param0: string, param1: Address): boolean {
-    let result = super.call("moderators", "moderators(string,address):(bool)", [
-      ethereum.Value.fromString(param0),
-      ethereum.Value.fromAddress(param1)
-    ]);
+  questionVoters(param0: Address, param1: BigInt): boolean {
+    let result = super.call(
+      "questionVoters",
+      "questionVoters(address,uint256):(bool)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
 
     return result[0].toBoolean();
   }
 
-  try_moderators(
-    param0: string,
-    param1: Address
+  try_questionVoters(
+    param0: Address,
+    param1: BigInt
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "moderators",
-      "moderators(string,address):(bool)",
-      [ethereum.Value.fromString(param0), ethereum.Value.fromAddress(param1)]
+      "questionVoters",
+      "questionVoters(address,uint256):(bool)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -422,74 +358,30 @@ export class Qrate extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  questionIdsToCheck(param0: string, param1: BigInt): BigInt {
-    let result = super.call(
-      "questionIdsToCheck",
-      "questionIdsToCheck(string,uint256):(uint256)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_questionIdsToCheck(
-    param0: string,
-    param1: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "questionIdsToCheck",
-      "questionIdsToCheck(string,uint256):(uint256)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  questions(param0: string, param1: BigInt): Qrate__questionsResult {
+  questions(param0: BigInt): Qrate__questionsResult {
     let result = super.call(
       "questions",
-      "questions(string,uint256):(uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "questions(uint256):(string,string,string,string,uint256,uint256,address,uint8)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new Qrate__questionsResult(
-      result[0].toBigInt(),
-      result[1].toBigInt(),
+      result[0].toString(),
+      result[1].toString(),
       result[2].toString(),
       result[3].toString(),
-      result[4].toString(),
-      result[5].toString(),
-      result[6].toBigInt(),
-      result[7].toBigInt(),
-      result[8].toAddress(),
-      result[9].toI32(),
-      result[10].toBigInt()
+      result[4].toBigInt(),
+      result[5].toBigInt(),
+      result[6].toAddress(),
+      result[7].toI32()
     );
   }
 
-  try_questions(
-    param0: string,
-    param1: BigInt
-  ): ethereum.CallResult<Qrate__questionsResult> {
+  try_questions(param0: BigInt): ethereum.CallResult<Qrate__questionsResult> {
     let result = super.tryCall(
       "questions",
-      "questions(string,uint256):(uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "questions(uint256):(string,string,string,string,uint256,uint256,address,uint8)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -497,121 +389,16 @@ export class Qrate extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new Qrate__questionsResult(
-        value[0].toBigInt(),
-        value[1].toBigInt(),
+        value[0].toString(),
+        value[1].toString(),
         value[2].toString(),
         value[3].toString(),
-        value[4].toString(),
-        value[5].toString(),
-        value[6].toBigInt(),
-        value[7].toBigInt(),
-        value[8].toAddress(),
-        value[9].toI32(),
-        value[10].toBigInt()
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toAddress(),
+        value[7].toI32()
       )
     );
-  }
-
-  questionToCheck(param0: string, param1: BigInt): boolean {
-    let result = super.call(
-      "questionToCheck",
-      "questionToCheck(string,uint256):(bool)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_questionToCheck(
-    param0: string,
-    param1: BigInt
-  ): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "questionToCheck",
-      "questionToCheck(string,uint256):(bool)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  questionVoted(param0: string, param1: BigInt, param2: Address): boolean {
-    let result = super.call(
-      "questionVoted",
-      "questionVoted(string,uint256,address):(bool)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-        ethereum.Value.fromAddress(param2)
-      ]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_questionVoted(
-    param0: string,
-    param1: BigInt,
-    param2: Address
-  ): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "questionVoted",
-      "questionVoted(string,uint256,address):(bool)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-        ethereum.Value.fromAddress(param2)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  questionVoters(param0: string, param1: BigInt, param2: BigInt): Address {
-    let result = super.call(
-      "questionVoters",
-      "questionVoters(string,uint256,uint256):(address)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_questionVoters(
-    param0: string,
-    param1: BigInt,
-    param2: BigInt
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "questionVoters",
-      "questionVoters(string,uint256,uint256):(address)",
-      [
-        ethereum.Value.fromString(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-        ethereum.Value.fromUnsignedBigInt(param2)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   threshold(param0: string): BigInt {
@@ -653,6 +440,32 @@ export class Qrate extends ethereum.SmartContract {
   }
 }
 
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
 export class AddQuestionCall extends ethereum.Call {
   get inputs(): AddQuestionCall__Inputs {
     return new AddQuestionCall__Inputs(this);
@@ -670,7 +483,7 @@ export class AddQuestionCall__Inputs {
     this._call = call;
   }
 
-  get _question_string(): string {
+  get _questionString(): string {
     return this._call.inputValues[0].value.toString();
   }
 
@@ -712,8 +525,16 @@ export class ApplyAsModeratorCall__Inputs {
     this._call = call;
   }
 
-  get _subject(): string {
+  get _name(): string {
     return this._call.inputValues[0].value.toString();
+  }
+
+  get _subject(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get _proof(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -725,144 +546,50 @@ export class ApplyAsModeratorCall__Outputs {
   }
 }
 
-export class ApproveModeratorCall extends ethereum.Call {
-  get inputs(): ApproveModeratorCall__Inputs {
-    return new ApproveModeratorCall__Inputs(this);
+export class ChangeModeratorStatusCall extends ethereum.Call {
+  get inputs(): ChangeModeratorStatusCall__Inputs {
+    return new ChangeModeratorStatusCall__Inputs(this);
   }
 
-  get outputs(): ApproveModeratorCall__Outputs {
-    return new ApproveModeratorCall__Outputs(this);
+  get outputs(): ChangeModeratorStatusCall__Outputs {
+    return new ChangeModeratorStatusCall__Outputs(this);
   }
 }
 
-export class ApproveModeratorCall__Inputs {
-  _call: ApproveModeratorCall;
+export class ChangeModeratorStatusCall__Inputs {
+  _call: ChangeModeratorStatusCall;
 
-  constructor(call: ApproveModeratorCall) {
+  constructor(call: ChangeModeratorStatusCall) {
     this._call = call;
   }
 
-  get _address(): Address {
+  get _moderator(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
-
-  get _subject(): string {
-    return this._call.inputValues[1].value.toString();
-  }
 }
 
-export class ApproveModeratorCall__Outputs {
-  _call: ApproveModeratorCall;
+export class ChangeModeratorStatusCall__Outputs {
+  _call: ChangeModeratorStatusCall;
 
-  constructor(call: ApproveModeratorCall) {
+  constructor(call: ChangeModeratorStatusCall) {
     this._call = call;
   }
 }
 
-export class ChangeQuestionStatusCall extends ethereum.Call {
-  get inputs(): ChangeQuestionStatusCall__Inputs {
-    return new ChangeQuestionStatusCall__Inputs(this);
+export class SetThresholdAndMinVotesCall extends ethereum.Call {
+  get inputs(): SetThresholdAndMinVotesCall__Inputs {
+    return new SetThresholdAndMinVotesCall__Inputs(this);
   }
 
-  get outputs(): ChangeQuestionStatusCall__Outputs {
-    return new ChangeQuestionStatusCall__Outputs(this);
-  }
-}
-
-export class ChangeQuestionStatusCall__Inputs {
-  _call: ChangeQuestionStatusCall;
-
-  constructor(call: ChangeQuestionStatusCall) {
-    this._call = call;
-  }
-
-  get _subject(): string {
-    return this._call.inputValues[0].value.toString();
+  get outputs(): SetThresholdAndMinVotesCall__Outputs {
+    return new SetThresholdAndMinVotesCall__Outputs(this);
   }
 }
 
-export class ChangeQuestionStatusCall__Outputs {
-  _call: ChangeQuestionStatusCall;
+export class SetThresholdAndMinVotesCall__Inputs {
+  _call: SetThresholdAndMinVotesCall;
 
-  constructor(call: ChangeQuestionStatusCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class SetMinVotesCall extends ethereum.Call {
-  get inputs(): SetMinVotesCall__Inputs {
-    return new SetMinVotesCall__Inputs(this);
-  }
-
-  get outputs(): SetMinVotesCall__Outputs {
-    return new SetMinVotesCall__Outputs(this);
-  }
-}
-
-export class SetMinVotesCall__Inputs {
-  _call: SetMinVotesCall;
-
-  constructor(call: SetMinVotesCall) {
-    this._call = call;
-  }
-
-  get _subject(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get _minVotes(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-}
-
-export class SetMinVotesCall__Outputs {
-  _call: SetMinVotesCall;
-
-  constructor(call: SetMinVotesCall) {
-    this._call = call;
-  }
-}
-
-export class SetThresholdCall extends ethereum.Call {
-  get inputs(): SetThresholdCall__Inputs {
-    return new SetThresholdCall__Inputs(this);
-  }
-
-  get outputs(): SetThresholdCall__Outputs {
-    return new SetThresholdCall__Outputs(this);
-  }
-}
-
-export class SetThresholdCall__Inputs {
-  _call: SetThresholdCall;
-
-  constructor(call: SetThresholdCall) {
+  constructor(call: SetThresholdAndMinVotesCall) {
     this._call = call;
   }
 
@@ -873,38 +600,16 @@ export class SetThresholdCall__Inputs {
   get _threshold(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
-}
 
-export class SetThresholdCall__Outputs {
-  _call: SetThresholdCall;
-
-  constructor(call: SetThresholdCall) {
-    this._call = call;
+  get _minVotes(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 
-export class DefaultCall extends ethereum.Call {
-  get inputs(): DefaultCall__Inputs {
-    return new DefaultCall__Inputs(this);
-  }
+export class SetThresholdAndMinVotesCall__Outputs {
+  _call: SetThresholdAndMinVotesCall;
 
-  get outputs(): DefaultCall__Outputs {
-    return new DefaultCall__Outputs(this);
-  }
-}
-
-export class DefaultCall__Inputs {
-  _call: DefaultCall;
-
-  constructor(call: DefaultCall) {
-    this._call = call;
-  }
-}
-
-export class DefaultCall__Outputs {
-  _call: DefaultCall;
-
-  constructor(call: DefaultCall) {
+  constructor(call: SetThresholdAndMinVotesCall) {
     this._call = call;
   }
 }
@@ -930,12 +635,8 @@ export class UpdateQuestionCall__Inputs {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get _subject(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
   get _vote(): boolean {
-    return this._call.inputValues[2].value.toBoolean();
+    return this._call.inputValues[1].value.toBoolean();
   }
 }
 

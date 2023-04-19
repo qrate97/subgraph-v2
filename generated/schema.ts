@@ -51,6 +51,15 @@ export class Moderator extends Entity {
     this.set("moderatorAddress", Value.fromString(value));
   }
 
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
   get subject(): string {
     let value = this.get("subject");
     return value!.toString();
@@ -58,6 +67,15 @@ export class Moderator extends Entity {
 
   set subject(value: string) {
     this.set("subject", Value.fromString(value));
+  }
+
+  get proof(): string {
+    let value = this.get("proof");
+    return value!.toString();
+  }
+
+  set proof(value: string) {
+    this.set("proof", Value.fromString(value));
   }
 
   get approved(): boolean {
@@ -128,103 +146,94 @@ export class Question extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get question_mainId(): BigInt {
-    let value = this.get("question_mainId");
+  get quesId(): BigInt {
+    let value = this.get("quesId");
     return value!.toBigInt();
   }
 
-  set question_mainId(value: BigInt) {
-    this.set("question_mainId", Value.fromBigInt(value));
+  set quesId(value: BigInt) {
+    this.set("quesId", Value.fromBigInt(value));
   }
 
-  get question_id(): BigInt {
-    let value = this.get("question_id");
+  get questionString(): string {
+    let value = this.get("questionString");
+    return value!.toString();
+  }
+
+  set questionString(value: string) {
+    this.set("questionString", Value.fromString(value));
+  }
+
+  get subject(): string {
+    let value = this.get("subject");
+    return value!.toString();
+  }
+
+  set subject(value: string) {
+    this.set("subject", Value.fromString(value));
+  }
+
+  get topic(): string {
+    let value = this.get("topic");
+    return value!.toString();
+  }
+
+  set topic(value: string) {
+    this.set("topic", Value.fromString(value));
+  }
+
+  get subTopic(): string {
+    let value = this.get("subTopic");
+    return value!.toString();
+  }
+
+  set subTopic(value: string) {
+    this.set("subTopic", Value.fromString(value));
+  }
+
+  get upvotes(): BigInt {
+    let value = this.get("upvotes");
     return value!.toBigInt();
   }
 
-  set question_id(value: BigInt) {
-    this.set("question_id", Value.fromBigInt(value));
+  set upvotes(value: BigInt) {
+    this.set("upvotes", Value.fromBigInt(value));
   }
 
-  get question_question_string(): string {
-    let value = this.get("question_question_string");
-    return value!.toString();
-  }
-
-  set question_question_string(value: string) {
-    this.set("question_question_string", Value.fromString(value));
-  }
-
-  get question_subject(): string {
-    let value = this.get("question_subject");
-    return value!.toString();
-  }
-
-  set question_subject(value: string) {
-    this.set("question_subject", Value.fromString(value));
-  }
-
-  get question_topic(): string {
-    let value = this.get("question_topic");
-    return value!.toString();
-  }
-
-  set question_topic(value: string) {
-    this.set("question_topic", Value.fromString(value));
-  }
-
-  get question_subTopic(): string {
-    let value = this.get("question_subTopic");
-    return value!.toString();
-  }
-
-  set question_subTopic(value: string) {
-    this.set("question_subTopic", Value.fromString(value));
-  }
-
-  get question_upvotes(): BigInt {
-    let value = this.get("question_upvotes");
+  get downvotes(): BigInt {
+    let value = this.get("downvotes");
     return value!.toBigInt();
   }
 
-  set question_upvotes(value: BigInt) {
-    this.set("question_upvotes", Value.fromBigInt(value));
+  set downvotes(value: BigInt) {
+    this.set("downvotes", Value.fromBigInt(value));
   }
 
-  get question_downvotes(): BigInt {
-    let value = this.get("question_downvotes");
-    return value!.toBigInt();
-  }
-
-  set question_downvotes(value: BigInt) {
-    this.set("question_downvotes", Value.fromBigInt(value));
-  }
-
-  get question_applicant(): Bytes {
-    let value = this.get("question_applicant");
+  get applicant(): Bytes {
+    let value = this.get("applicant");
     return value!.toBytes();
   }
 
-  set question_applicant(value: Bytes) {
-    this.set("question_applicant", Value.fromBytes(value));
+  set applicant(value: Bytes) {
+    this.set("applicant", Value.fromBytes(value));
   }
 
-  get question_status(): i32 {
-    let value = this.get("question_status");
+  get status(): i32 {
+    let value = this.get("status");
     return value!.toI32();
   }
 
-  set question_status(value: i32) {
-    this.set("question_status", Value.fromI32(value));
+  set status(value: i32) {
+    this.set("status", Value.fromI32(value));
   }
 
-  get question_incentives(): BigInt {
-    let value = this.get("question_incentives");
-    return value!.toBigInt();
+  get voters(): Array<Bytes> {
+    let value = this.get("voters");
+    return value!.toBytesArray();
   }
 
-  set question_incentives(value: BigInt) {
-    this.set("question_incentives", Value.fromBigInt(value));
+  set voters(value: Array<Bytes>) {
+    this.set("voters", Value.fromBytesArray(value));
   }
 
   get blockNumber(): BigInt {
@@ -252,5 +261,46 @@ export class Question extends Entity {
 
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
+  }
+}
+
+export class Subject extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Subject entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Subject must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Subject", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Subject | null {
+    return changetype<Subject | null>(store.get("Subject", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get subject_name(): string {
+    let value = this.get("subject_name");
+    return value!.toString();
+  }
+
+  set subject_name(value: string) {
+    this.set("subject_name", Value.fromString(value));
   }
 }

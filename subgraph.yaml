@@ -6,9 +6,9 @@ dataSources:
     name: Qrate
     network: mumbai
     source:
-      address: "0x42841ee00b21bcf92afb4280e47a60e15aa42fc2"
+      address: "0x3ea8947CC7ED77392E55791Ff80D99bF90b20C6d"
       abi: Qrate
-      startBlock: 32199743
+      startBlock: 34573381
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -16,12 +16,15 @@ dataSources:
       entities:
         - Moderator
         - Question
+        - Subject
       abis:
         - name: Qrate
           file: ./abis/Qrate.json
       eventHandlers:
-        - event: Moderator(address,string,bool)
+        - event: Moderator(indexed address,(string,string,string,bool))
           handler: handleModerator
-        - event: Question((uint256,uint256,string,string,string,string,uint256,uint256,address,uint8,uint256))
+        - event: Question(indexed uint256,address,(string,string,string,string,uint256,uint256,address,uint8))
           handler: handleQuestion
+        - event: Subject(string)
+          handler: handleSubject
       file: ./src/qrate.ts

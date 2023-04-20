@@ -29,6 +29,7 @@ export function handleQuestion(event: QuestionEvent): void {
   let entity = Question.load(id);
   if(!entity)
     entity = new Question(id)
+  entity.quesId = event.params.quesId
   entity.questionString = event.params.question.questionString
   entity.subject = event.params.question.subject
   entity.topic = event.params.question.topic
@@ -45,6 +46,9 @@ export function handleQuestion(event: QuestionEvent): void {
     let voters = entity.voters
     voters.push(event.params.sender)
     entity.voters = voters
+  }
+  else{
+    entity.voters = []
   }
   //entity.question_voters = event.params.question.voters
 
